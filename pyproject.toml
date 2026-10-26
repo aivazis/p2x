@@ -1,0 +1,19 @@
+# -*- toml -*-
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis <michael.aivazis@para-sim.com>
+# (c) 1998-2026 all rights reserved
+
+
+# pytest runs the same drivers mm does: every file under {tests} is a driver, and its {test}
+# functions are the cases; the package under test comes from the install prefix on the path
+[tool.pytest.ini_options]
+# where the test suites live
+testpaths = ["tests"]
+# every python file in a suite is a test driver
+python_files = ["*.py"]
+# import drivers by path, without putting their directories on the module search path
+addopts = "--import-mode=importlib -p no:cacheprovider"
+
+
+# end of file

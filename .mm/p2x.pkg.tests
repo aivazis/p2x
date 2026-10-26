@@ -1,0 +1,17 @@
+# -*- makefile -*-
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis <michael.aivazis@para-sim.com>
+# (c) 1998-2026 all rights reserved
+
+
+# the p2x package testsuite
+p2x.pkg.tests.stem := p2x.pkg
+# it needs the package installed before it can run
+p2x.pkg.tests.prerequisites := p2x.pkg
+
+# clean up after pytest, which leaves its bytecode cache behind
+tests.p2x.pkg.clean := __pycache__
+
+
+# end of file

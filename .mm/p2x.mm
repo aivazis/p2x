@@ -7,9 +7,13 @@
 
 # p2x consists of a python package
 p2x.packages := p2x.pkg
+# and test suites
+p2x.tests := p2x.pkg.tests
 
 # load the packages
 include $(p2x.packages)
+# the test suites
+include $(p2x.tests)
 
 
 # end of file
