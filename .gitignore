@@ -1,0 +1,20 @@
+# -*- gitignore -*-
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis <michael.aivazis@para-sim.com>
+# (c) 1998-2026 all rights reserved
+
+
+# ignore rules
+
+*~
+
+# machine-dependent config
+/.mm/config.def
+
+# the default build locations (mm)
+/builds
+/products
+
+
+# end of file
