@@ -1,0 +1,14 @@
+# -*- makefile -*-
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis <michael.aivazis@para-sim.com>
+# (c) 1998-2026 all rights reserved
+
+
+# metadata for the p2x python package
+# its name matches the name of the project, so it will get set correctly by default
+# its path relative to the project
+p2x.pkg.root := pkg/p2x/
+
+
+# end of file
