@@ -1,0 +1,42 @@
+{
+    "configurations": [
+        {
+            "name": "mm: linux - x64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:mm_prefix}/include/**",
+                "${env:vs_prefix_usr}/include/**",
+                "${env:vs_prefix_sys}/include/**",
+                "/usr/include/python${env:mm_python}/**"
+            ],
+            "defines": [
+                "DEBUG"
+            ],
+            "compilerPath": "${env:vs_prefix_sys}/bin/${env:vs_compiler}",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "linux-clang-x64"
+        },
+        {
+            "name": "mm: mac - arm64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:mm_prefix}/include/**",
+                "${env:vs_prefix_usr}/include/**",
+                "${env:vs_prefix_sys}/include/**",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/**"
+            ],
+            "defines": [
+                "DEBUG"
+            ],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "${env:vs_prefix_sys}/bin/${env:vs_compiler}",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}
