@@ -6,7 +6,7 @@
 
 
 """
-The kinds of properties components and protocols can declare
+The types of properties components and protocols can declare
 """
 
 # the simple types, named after the python types they produce

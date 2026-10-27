@@ -5,14 +5,11 @@
 # (c) 1998-2026 all rights reserved
 
 
-"""
-The base class of the typed attributes of components and protocols
-"""
-
 # the error raised when a visitor has no handler for me
 from ..exceptions import NotAVisitorError
 
 
+# the base class of the typed attributes of components and protocols
 class Trait:
     """
     A typed attribute of components and protocols

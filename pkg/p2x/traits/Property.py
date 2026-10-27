@@ -5,14 +5,11 @@
 # (c) 1998-2026 all rights reserved
 
 
-"""
-The base class of traits whose values are simple objects
-"""
-
 # the superclass
 from .Trait import Trait
 
 
+# the base class of traits whose values are simple objects
 class Property(Trait):
     """
     A trait whose values are simple objects

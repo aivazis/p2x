@@ -5,14 +5,11 @@
 # (c) 1998-2026 all rights reserved
 
 
-"""
-Properties whose values are real numbers
-"""
-
 # the superclass
 from .Property import Property
 
 
+# properties whose values are real numbers
 class Float(Property):
     """
     A property whose values are real numbers
