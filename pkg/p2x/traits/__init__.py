@@ -13,4 +13,7 @@ Typed attributes for components and protocols
 from .Trait import Trait as trait
 from .Property import Property as property
 
+# the methods that are part of the external interface of their owners
+from .Behavior import Behavior as behavior
+
 # end of file
