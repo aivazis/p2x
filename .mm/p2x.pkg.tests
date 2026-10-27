@@ -14,6 +14,7 @@ p2x.pkg.tests.prerequisites := p2x.pkg
 tests.p2x.pkg.clean := __pycache__
 tests.p2x.pkg.components.clean := __pycache__
 tests.p2x.pkg.protocols.clean := __pycache__
+tests.p2x.pkg.schemata.clean := __pycache__
 tests.p2x.pkg.traits.clean := __pycache__
 
 
