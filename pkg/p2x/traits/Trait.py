@@ -15,6 +15,27 @@ class Trait:
     A typed attribute of components and protocols
     """
 
+    # the descriptor protocol
+    def __set_name__(self, owner: type, name: str) -> None:
+        """
+        Learn the {name} under which i am declared in the body of {owner}
+        """
+
+    def __get__(self, instance: object, owner: type) -> object:
+        """
+        Look up my value in {instance}, or in {owner} when accessed through the class
+        """
+
+    def __set__(self, instance: object, value: object) -> None:
+        """
+        Make {value} my value in {instance}
+        """
+
+    def __delete__(self, instance: object) -> None:
+        """
+        Discard my value in {instance}
+        """
+
     # visiting
     def _p2x_identify(self, authority: object, **kwds) -> object:
         """
