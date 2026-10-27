@@ -5,6 +5,31 @@
 # (c) 1998-2026 all rights reserved
 
 
+# install time
+[project]
+name = "p2x"
+dynamic = ["version"]
+description = "A framework for building scientific applications"
+readme = "README.md"
+authors = [
+    { name = "Michael A.G. Aïvázis", email = "michael.aivazis@para-sim.com" },
+]
+maintainers = [
+    { name = "Michael A.G. Aïvázis", email = "michael.aivazis@para-sim.com" },
+]
+# the floor: the oldest interpreter the test suite is known to pass under; CI exercises it and
+# everything newer (see .github/workflows/mm.yaml)
+requires-python = ">=3.14"
+keywords = ["science", "framework"]
+classifiers = [
+    "Development Status :: 6 - Mature",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = ["ruamel.yaml"]
+
+
 # pytest runs the same drivers mm does: every file under {tests} is a driver, and its {test}
 # functions are the cases; the package under test comes from the install prefix on the path
 [tool.pytest.ini_options]
@@ -14,6 +39,14 @@ testpaths = ["tests"]
 python_files = ["*.py"]
 # import drivers by path, without putting their directories on the module search path
 addopts = "--import-mode=importlib -p no:cacheprovider"
+
+
+# formatting: wrap at column 100
+[tool.black]
+line-length = 100
+# the versions of python the code is formatted for; without an explicit list, black infers
+# one from {requires-python} that reaches past the interpreter it runs under
+target-version = ["py314"]
 
 
 # the spell check of the prose: {skip} leaves out the binary formats, and {ignore-regex} leaves out
