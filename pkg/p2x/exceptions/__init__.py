@@ -12,4 +12,7 @@ The p2x exception hierarchy
 # the root
 from .P2XError import P2XError
 
+# visiting
+from .NotAVisitorError import NotAVisitorError
+
 # end of file
