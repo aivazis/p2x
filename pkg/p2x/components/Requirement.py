@@ -42,7 +42,7 @@ class Requirement(type):
         # show what was found, for now
         print(f"{self.__name__}: {name} ({type(trait).__name__})")
         # all done
-        return
+        return trait
 
 
 # end of file
