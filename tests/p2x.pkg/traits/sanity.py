@@ -20,6 +20,8 @@ def test() -> None:
 
     # the base classes are in the traits package
     assert issubclass(p2x.traits.property, p2x.traits.trait)
+    # and so are the behaviors
+    assert issubclass(p2x.traits.behavior, p2x.traits.trait)
 
     # all done
     return
