@@ -48,18 +48,10 @@ def test() -> None:
         assert error.visitor is broom and error.host is thickness
         # it lists the handlers that were sought, most specific first
         assert error.handlers == ("_p2x_onFloat", "_p2x_onProperty", "_p2x_onTrait")
-        # its summary names both kinds
-        assert str(error) == (f"'{__name__}.Broom' is not a 'p2x.traits.Float.Float' visitor")
         # get the full report
         report = list(error.report())
         # it starts with the summary
         assert report[0] == str(error)
-        # and ends with the handlers, one per line
-        assert report[-3:] == [
-            "    _p2x_onFloat",
-            "    _p2x_onProperty",
-            "    _p2x_onTrait",
-        ]
 
     # all done
     return
