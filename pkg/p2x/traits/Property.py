@@ -5,6 +5,9 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .Trait import Trait
 
@@ -16,7 +19,7 @@ class Property(Trait):
     """
 
     # visiting
-    def _p2x_identify(self, authority: object, **kwds) -> object:
+    def _p2x_identify(self, authority: typing.Any, **kwds) -> object:
         """
         Let {authority} know i am a property
         """
