@@ -19,14 +19,16 @@ class Trait:
     """
 
     # metamethods
-    def __init__(self, **kwds) -> None:
+    def __init__(self, default: object = None, **kwds) -> None:
         """
-        Make a trait that doesn't know yet the name under which it is declared
+        Make a trait whose value is {default} until something else is assigned to it
         """
         # chain up
         super().__init__(**kwds)
-        # my name is learned when i am placed in the body of a class
+        # my name
         self.name: str | None = None
+        # my default value
+        self.default = default
         # all done
         return
 
@@ -48,8 +50,8 @@ class Trait:
         if instance is None:
             # hand myself over
             return self
-        # an instance keeps my value under my name; a value that was never set is uninitialized
-        return instance.__dict__.get(self.name)
+        # an instance keeps my value under my name; one without a value reads my default
+        return instance.__dict__.get(self.name, self.default)
 
     def __set__(self, instance: object, value: object) -> None:
         """

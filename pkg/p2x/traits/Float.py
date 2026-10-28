@@ -18,6 +18,16 @@ class Float(Property):
     A property whose values are real numbers
     """
 
+    # metamethods
+    def __init__(self, default: float = 0.0, **kwds) -> None:
+        """
+        Mark a trait as a floating point number
+        """
+        # chain up, with zero as my preferred default
+        super().__init__(default=default, **kwds)
+        # all done
+        return
+
     # visiting
     def _p2x_identify(self, authority: typing.Any, **kwds) -> object:
         """
