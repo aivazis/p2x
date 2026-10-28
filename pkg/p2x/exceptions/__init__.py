@@ -15,4 +15,7 @@ from .P2XError import P2XError
 # visiting
 from .NotAVisitorError import NotAVisitorError
 
+# declaring traits
+from .BehaviorError import BehaviorError
+
 # end of file

@@ -18,6 +18,59 @@ class Behavior(Trait):
     A trait that captures a method that is part of the external interface of its owner
     """
 
+    # metamethods
+    def __new__(cls, default: typing.Callable | None = None, **kwds) -> typing.Any:
+        """
+        Make a behavior when given its method, a stand in when given anything else, or else a
+        decorator that waits for the method
+        """
+        # when used as a plain decorator, the method is known
+        if callable(default):
+            # so make a behavior right away
+            return super().__new__(cls)
+
+        # anything else in its place is a mistake
+        if default is not None:
+            # that gets a stand in, which python initializes with my arguments; it derives from
+            # me, so it is imported here
+            from .Malformed import Malformed
+
+            # make one
+            return super().__new__(Malformed)
+
+        # otherwise, i was given my metadata ahead of the method, so hand python a decorator that
+        # waits for the method and then makes the behavior with all it knows
+        def decorator(method: typing.Callable) -> "Behavior":
+            """
+            Make a behavior that decorates {method}
+            """
+            # with the metadata i was given
+            return cls(default=method, **kwds)
+
+        # and hand it over
+        return decorator
+
+    def __init__(self, default: typing.Callable | None = None, **kwds) -> None:
+        """
+        Make a behavior whose implementation is {default}, the method it decorates
+        """
+        # chain up
+        super().__init__(default=default, **kwds)
+        # all done
+        return
+
+    # the descriptor protocol
+    def __get__(self, instance: object, owner: type) -> typing.Callable:
+        """
+        Hand over my method as python does for functions: bound to {instance}, if there is one
+        """
+        # when accessed through the class
+        if instance is None:
+            # hand over the method itself
+            return self.default
+        # otherwise, bind it to {instance}
+        return self.default.__get__(instance, owner)
+
     # visiting
     def _p2x_identify(self, authority: typing.Any, **kwds) -> object:
         """
