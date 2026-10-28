@@ -33,10 +33,17 @@ def test() -> None:
         # a constant is boring
         teeth = 60
 
-        # so is a method
+        # a behavior is part of what the saw offers
+        @p2x.traits.behavior
         def cut(self) -> None:
             """
             Make a cut
+            """
+
+        # but a plain method is boring
+        def clean(self) -> None:
+            """
+            Clear the sawdust
             """
 
     # the same saw, mounted on a rail, adds a setting of its own

@@ -33,10 +33,17 @@ def test() -> None:
         # a constant is boring
         teeth = 24
 
-        # so is a method
+        # a behavior is a requirement
+        @p2x.traits.behavior
         def cut(self) -> None:
             """
             Make a cut
+            """
+
+        # but a plain method is boring
+        def clean(self) -> None:
+            """
+            Clear the sawdust
             """
 
     # a saw that runs along a rail adds a requirement of its own
