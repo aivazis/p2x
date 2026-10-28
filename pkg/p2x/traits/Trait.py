@@ -42,35 +42,6 @@ class Trait:
         # all done
         return
 
-    def __get__(self, instance: object, owner: type) -> object:
-        """
-        Look up my value in {instance}, or hand myself over when accessed through the class
-        """
-        # when accessed through the class, which keeps me under my name
-        if instance is None:
-            # hand myself over
-            return self
-        # an instance keeps my value under my name; one without a value reads my default
-        return instance.__dict__.get(self.name, self.default)
-
-    def __set__(self, instance: object, value: object) -> None:
-        """
-        Make {value} my value in {instance}
-        """
-        # store it under my name
-        instance.__dict__[self.name] = value
-        # all done
-        return
-
-    def __delete__(self, instance: object) -> None:
-        """
-        Discard my value in {instance}
-        """
-        # forget it, whether it was ever set or not
-        instance.__dict__.pop(self.name, None)
-        # all done
-        return
-
     # visiting
     def _p2x_identify(self, authority: typing.Any, **kwds) -> object:
         """
