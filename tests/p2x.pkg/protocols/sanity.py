@@ -11,6 +11,7 @@ Sanity check: verify that the protocol base class and its metaclass are accessib
 """
 
 
+# the test
 def test() -> None:
     """
     Reach the protocol base class and its metaclass

@@ -32,6 +32,7 @@ def caller() -> tuple:
     return mine, theirs, line
 
 
+# the test
 def test() -> None:
     """
     Check the locators {here} builds, and that it opens no files to build them

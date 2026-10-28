@@ -15,6 +15,7 @@ import p2x.components
 import p2x.traits.properties
 
 
+# the test
 def test() -> None:
     """
     Declare two protocols with nothing but properties, one derived from the other

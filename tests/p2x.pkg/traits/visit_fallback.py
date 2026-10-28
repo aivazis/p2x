@@ -29,6 +29,7 @@ class Labeler:
         return trait
 
 
+# the test
 def test() -> None:
     """
     Visit a real number with a visitor that has no handler for real numbers

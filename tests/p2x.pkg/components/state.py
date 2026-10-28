@@ -15,6 +15,7 @@ import p2x.components
 import p2x.traits.properties
 
 
+# the test
 def test() -> None:
     """
     Set, read and discard the value of a trait on two instances of the same component

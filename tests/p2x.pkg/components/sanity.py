@@ -11,6 +11,7 @@ Sanity check: verify that the component base class and its metaclass are accessi
 """
 
 
+# the test
 def test() -> None:
     """
     Reach the component base class and its metaclass

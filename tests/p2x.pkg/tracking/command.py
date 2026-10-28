@@ -11,6 +11,7 @@ Verify that the command locator names the command line argument
 """
 
 
+# the test
 def test() -> None:
     """
     Render a command locator

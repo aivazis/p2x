@@ -11,6 +11,7 @@ Verify that the file locator renders the file and the position within it
 """
 
 
+# the test
 def test() -> None:
     """
     Render a file locator that knows its line and column

@@ -20,6 +20,7 @@ import p2x.exceptions
 import p2x.traits
 
 
+# the test
 def test() -> None:
     """
     Declare a behavior whose implementation is a number

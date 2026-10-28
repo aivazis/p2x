@@ -11,6 +11,7 @@ Sanity check: verify that the package is accessible
 """
 
 
+# the test
 def test() -> None:
     """
     Import the package

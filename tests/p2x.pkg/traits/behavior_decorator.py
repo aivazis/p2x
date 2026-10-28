@@ -14,6 +14,7 @@ A behavior captures the method it decorates, whether or not the decorator is giv
 import p2x.traits
 
 
+# the test
 def test() -> None:
     """
     Hand a behavior its method in each of the ways it accepts, and check that it captured it

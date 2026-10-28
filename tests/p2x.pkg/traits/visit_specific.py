@@ -43,6 +43,7 @@ class SpecSheet:
         return f"a measurement in {unit}"
 
 
+# the test
 def test() -> None:
     """
     Visit one trait of each kind with the spec sheet

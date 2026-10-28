@@ -11,6 +11,7 @@ Verify that the script locator leaves out the parts of the location that are unk
 """
 
 
+# the test
 def test() -> None:
     """
     Render script locators with an unknown line, an unknown function, and both

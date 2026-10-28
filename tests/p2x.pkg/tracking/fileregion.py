@@ -11,6 +11,7 @@ Verify that the region locator renders the file and both ends of the region
 """
 
 
+# the test
 def test() -> None:
     """
     Render a region whose ends are fully known

@@ -11,6 +11,7 @@ Verify that the simple locator renders its source
 """
 
 
+# the test
 def test() -> None:
     """
     Render a simple locator

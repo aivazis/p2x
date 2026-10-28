@@ -11,6 +11,7 @@ Verify that a chain renders a location followed by the one that caused it
 """
 
 
+# the test
 def test() -> None:
     """
     Chain two simple locators

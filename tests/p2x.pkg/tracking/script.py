@@ -11,6 +11,7 @@ Verify that the script locator renders the file, the line and the function
 """
 
 
+# the test
 def test() -> None:
     """
     Render a script locator that knows its line and function

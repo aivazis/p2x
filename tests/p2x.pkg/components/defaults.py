@@ -15,6 +15,7 @@ import p2x.components
 import p2x.traits.properties
 
 
+# the test
 def test() -> None:
     """
     Read the defaults of a component whose traits were declared in both styles

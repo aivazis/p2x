@@ -11,6 +11,7 @@ Sanity check: verify that the schemata are accessible
 """
 
 
+# the test
 def test() -> None:
     """
     Reach the schemata

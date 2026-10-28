@@ -14,6 +14,7 @@ Calling a behavior through its class runs the method it decorates
 import p2x.traits
 
 
+# the test
 def test() -> None:
     """
     Call a decorated method through the class, the way a subclass reaches its base
