@@ -21,6 +21,7 @@ class SpecSheet:
     A visitor that describes each trait in the words of its most specific kind
     """
 
+    # visiting
     def _p2x_onTrait(self, trait: p2x.traits.trait, **kwds) -> str:
         """
         Describe a trait of no particular kind

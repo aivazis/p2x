@@ -15,6 +15,7 @@ without reading any source files
 import sys
 
 
+# a function that asks for locators, so the test can check where they point
 def caller() -> tuple:
     """
     Ask for a locator that records this function, and one that records my caller

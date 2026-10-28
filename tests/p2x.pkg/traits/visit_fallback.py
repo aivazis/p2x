@@ -21,6 +21,7 @@ class Labeler:
     A visitor that only knows about properties
     """
 
+    # visiting
     def _p2x_onProperty(self, trait: p2x.traits.property, **kwds) -> p2x.traits.property:
         """
         Label a property by handing it back
