@@ -63,9 +63,7 @@ class Requirement(type):
         """
         Visit a {trait} declared under {name}
         """
-        # show what was found, for now
-        print(f"{self.__name__}: {name} ({type(trait).__name__})")
-        # all done
+        # nothing to do yet
         return trait
 
 
