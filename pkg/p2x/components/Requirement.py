@@ -35,7 +35,7 @@ class Requirement(type):
         return record
 
     # visiting
-    def _p2x_onTrait(self, trait: object, name: str, **kwds) -> None:
+    def _p2x_onTrait(self, trait: object, name: str, **kwds) -> object:
         """
         Visit a {trait} declared under {name}
         """
