@@ -36,9 +36,9 @@ def test() -> None:
     # make two saws
     thin = PanelSaw()
     thick = PanelSaw()
-    # neither has a kerf yet
-    assert thin.kerf is None
-    assert thick.kerf is None
+    # neither has a kerf of its own yet, so both read the default
+    assert thin.kerf == 0.0
+    assert thick.kerf == 0.0
 
     # give each one its own
     thin.kerf = 1.5
@@ -49,8 +49,8 @@ def test() -> None:
 
     # discard the kerf of one of them
     del thin.kerf
-    # it is uninitialized again
-    assert thin.kerf is None
+    # it reads the default again
+    assert thin.kerf == 0.0
     # while the other one is untouched
     assert thick.kerf == 3.2
     # discarding a value that isn't there is harmless
