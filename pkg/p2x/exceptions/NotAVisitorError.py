@@ -5,10 +5,6 @@
 # (c) 1998-2026 all rights reserved
 
 
-"""
-The error raised when an object is asked to visit something it has no handlers for
-"""
-
 # support
 from collections.abc import Iterator
 
@@ -16,13 +12,16 @@ from collections.abc import Iterator
 from .P2XError import P2XError
 
 
+# an object asked to visit something it has no handlers for
 class NotAVisitorError(P2XError, NotImplementedError):
     """
     Raised when a host has exhausted every handler it could ask its visitor for
     """
 
     # the message template
-    description = "'{error.visitorType}' is not a '{error.hostType}' visitor"
+    description = (
+        "'{error.visitor.__class__.__name__}' is not a '{error.host.__class__.__name__}' visitor"
+    )
 
     # interface
     def report(self) -> Iterator[str]:
@@ -46,18 +45,18 @@ class NotAVisitorError(P2XError, NotImplementedError):
 
     # metamethods
     def __init__(self, *, visitor: object, host: object, handlers: tuple[str, ...], **kwds) -> None:
+        """
+        Record the {visitor} that came up short, the {host} it visited, and the {handlers} the
+        host asked for
+        """
         # chain up
         super().__init__(**kwds)
         # the object that was asked to visit
         self.visitor = visitor
         # the object that was visited
         self.host = host
-        # the names of the handlers the host asked for, in the order it asked
+        # and the names of the handlers the host asked for, in the order it asked
         self.handlers = handlers
-        # the fully qualified name of the type of the visitor
-        self.visitorType = f"{type(visitor).__module__}.{type(visitor).__qualname__}"
-        # and of the type of the host
-        self.hostType = f"{type(host).__module__}.{type(host).__qualname__}"
         # all done
         return
 

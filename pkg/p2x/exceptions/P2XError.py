@@ -5,11 +5,11 @@
 # (c) 1998-2026 all rights reserved
 
 
-"""
-The base class of every error p2x raises
-"""
+# support
+from collections.abc import Iterator
 
 
+# the root of the p2x errors
 class P2XError(Exception):
     """
     The base class of every error p2x raises
@@ -19,7 +19,7 @@ class P2XError(Exception):
     description = "an unknown p2x error"
 
     # interface
-    def report(self):
+    def report(self) -> Iterator[str]:
         """
         Generate an error report with the full details of the error
         """
@@ -30,6 +30,9 @@ class P2XError(Exception):
 
     # metamethods
     def __init__(self, **kwds) -> None:
+        """
+        Make an error; subclasses record what describes it
+        """
         # chain up
         super().__init__(**kwds)
         # all done
