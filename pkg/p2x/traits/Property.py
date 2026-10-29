@@ -21,14 +21,14 @@ class Property(Trait):
     # the descriptor protocol
     def __get__(self, instance: object, owner: type) -> object:
         """
-        Look up my value in {instance}, or in {owner} when accessed through the class
+        Look up my value in {instance}, or in {owner} when {instance} has none of its own
         """
-        # when accessed through the class
-        if instance is None:
-            # let my superclass ask the class for my value
-            return super().__get__(instance, owner)
-        # an instance keeps my value under my name; one without a value reads my default
-        return instance.__dict__.get(self.name, self.default)
+        # an instance keeps its own value under my name
+        if instance is not None and self.name in instance.__dict__:
+            # so hand it over
+            return instance.__dict__[self.name]
+        # otherwise, let my superclass ask the class for my value
+        return super().__get__(instance, owner)
 
     def __set__(self, instance: object, value: object) -> None:
         """
