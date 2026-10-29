@@ -28,4 +28,7 @@ from .TraitReuseError import TraitReuseError
 # looking up traits
 from .TraitNotFoundError import TraitNotFoundError
 
+# reading trait values
+from .TraitReadError import TraitReadError
+
 # end of file

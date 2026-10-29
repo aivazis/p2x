@@ -11,6 +11,9 @@ import typing
 # the error raised when a visitor has no handler for me
 from ..exceptions import NotAVisitorError
 
+# the error raised when my value cannot be read
+from ..exceptions import TraitReadError
+
 # the record of where my default was set
 from .. import tracking
 
@@ -71,7 +74,15 @@ class Trait:
         Look up my value in {owner}
         """
         # {owner} knows its values
-        return owner._p2x_read(trait=self)
+        read = owner._p2x_read
+        # attempt to
+        try:
+            # ask it for mine
+            return read(trait=self)
+        # if the read stumbles on a missing attribute, python would take me for missing
+        except AttributeError as error:
+            # so report the mistake as a failed read
+            raise TraitReadError(configurable=owner, trait=self) from error
 
     def __set_name__(self, owner: type, name: str) -> None:
         """

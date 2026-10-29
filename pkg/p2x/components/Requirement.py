@@ -9,12 +9,14 @@
 import collections.abc
 import typing
 
-# the errors in the declarations of traits
+# the errors in the declarations and lookups of traits
 from ..exceptions import (
     TraitAliasAttributeCollisionError,
     TraitAliasCollisionError,
     TraitAliasError,
     TraitEmptyAliasError,
+    TraitNotFoundError,
+    TraitReadError,
     TraitReservedNameError,
     TraitReuseError,
 )
@@ -71,6 +73,35 @@ class Requirement(type):
 
         # all done
         return record
+
+    def __getattr__(self, name: str) -> object:
+        """
+        Read the value of the trait that answers to {name}, when python finds nothing by that name
+        """
+        # the framework's names and python's own are never traits, and python probes for them
+        if name.startswith("_p2x_") or (name.startswith("__") and name.endswith("__")):
+            # so they are simply missing
+            raise AttributeError(
+                f"type object '{self.__name__}' has no attribute '{name}'", name=name, obj=self
+            )
+        # otherwise, attempt to
+        try:
+            # find the trait that answers to {name}
+            trait = self._p2x_trait(name)
+        # if there isn't one
+        except TraitNotFoundError:
+            # the name is missing, and python says so
+            raise AttributeError(
+                f"type object '{self.__name__}' has no attribute '{name}'", name=name, obj=self
+            ) from None
+        # otherwise, attempt to
+        try:
+            # read its value
+            return self._p2x_read(trait=trait)
+        # if the read stumbles on a missing attribute, python would take the trait for missing
+        except AttributeError as error:
+            # so report the mistake as a failed read
+            raise TraitReadError(configurable=self, trait=trait) from error
 
     # initializers of the record state
     def _p2x_initializeNamemap(self, *, symbols: SymbolTable) -> dict[str, str]:
