@@ -13,7 +13,7 @@ from .P2XError import P2XError
 
 # the types in my annotations, protected to avoid making cycles
 if typing.TYPE_CHECKING:
-    # configurables
+    # configurable
     from ..components.Configurable import Configurable
 
 
