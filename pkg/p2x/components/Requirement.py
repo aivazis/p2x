@@ -55,54 +55,63 @@ class Requirement(type):
 
         # build the record
         record = super().__new__(cls, name, bases, attributes, **kwds)
-        # give it a map from the aliases of the traits it declares to their canonical names, to
-        # fill as they are visited; the traits themselves live in its {__dict__}, and inherited
-        # traits stay with the ancestors that declare them
-        record._p2x_namemap = {}
+        # build a map (namemap: alias -> name) with the aliases of the locally declared traits
+        namemap = record._p2x_initializeNamemap(symbols=attributes)
 
-        # mistakes in the declaration are collected, starting with the ones the symbol table
-        # noticed while the body ran, and then as the traits are visited, so they can all be
-        # reported together
-        errors = list(attributes.errors)
-        # the names of the plain attributes, which no alias may take
-        plain = set()
-        # go through the attributes in the order they were declared
-        for key, value in attributes.items():
-            # interesting attributes know how to identify themselves to a visitor; like python's
-            # special methods, the hook is looked up on the type, so classes in the body are boring
-            try:
-                # find out how this one identifies itself
-                identify = type(value)._p2x_identify
-            # if it doesn't know how
-            except AttributeError:
-                # it is boring
-                plain.add(key)
-                # and there is nothing more to do
-                continue
-            # otherwise, let it introduce itself to the record, which is the visitor; this happens
-            # outside the {try}, so a mistake in a handler is never mistaken for a boring attribute
-            identify(value, authority=record, name=key, errors=errors)
-
-        # with all the aliases known, look for the ones that name a plain attribute of the body
-        for alias, canonical in record._p2x_namemap.items():
-            # neither one is nearer than the other, so
-            if alias in plain:
-                # taking the name is a mistake
-                errors.append(
-                    TraitAliasAttributeCollisionError(
-                        alias=alias, trait=attributes[canonical], value=attributes[alias]
-                    )
-                )
-
-        # if the declaration had mistakes
-        if errors:
+        # if the class declaration bumped into any mistakes
+        if attributes.errors:
             # report them all at once
-            raise ExceptionGroup(f"mistakes in the declaration of {record.__name__}", errors)
+            raise ExceptionGroup(
+                f"mistakes in the declaration of {record.__name__}", attributes.errors
+            )
+
+        # attach the namemap
+        record._p2x_namemap = namemap
 
         # all done
         return record
 
-    # visiting
+    # initializers of the record state
+    def _p2x_initializeNamemap(self, *, symbols: SymbolTable) -> dict[str, str]:
+        """
+        Build a map of trait aliases to their canonical name, i.e. the name by which they
+        are known in the class attribute dictionary
+        """
+        # create the name map
+        namemap = {}
+        # create a pile with the name of regular attributes
+        plain = set()
+
+        # go through the {symbols} harvested from the class body
+        for key, value in symbols.items():
+            # our trait descriptors know how to identify themselves, so attempt to
+            try:
+                # find out whether this particular one does; formulate the question
+                # carefully to minimize any crosstalk from its implementation
+                identify = type(value)._p2x_identify
+            # if {value} doesn't know how to identify itself
+            except AttributeError:
+                # it is a plain attribute
+                plain.add(key)
+                # that requires no further processing
+                continue
+            # otherwise, it's one of ours; ask it to identify itself
+            identify(value, authority=self, name=key, namemap=namemap, errors=symbols.errors)
+
+        # with the aliases harvested, look for names that conflict with {plain} attributes
+        for alias, canonical in namemap.items():
+            # if this {alias} conflicts with a {plain} attribute
+            if alias in plain:
+                # this is almost certainly a bug in my declaration
+                symbols.errors.append(
+                    TraitAliasAttributeCollisionError(
+                        alias=alias, trait=symbols[canonical], value=symbols[alias]
+                    )
+                )
+        # hand off the populated {namemap}
+        return namemap
+
+    # trait recognition
     def _p2x_onMalformed(self, trait: typing.Any, errors: list, **kwds) -> object:
         """
         Set aside the error carried by a malformed {trait}
@@ -112,7 +121,9 @@ class Requirement(type):
         # all done
         return trait
 
-    def _p2x_onTrait(self, trait: typing.Any, name: str, errors: list, **kwds) -> object:
+    def _p2x_onTrait(
+        self, trait: typing.Any, name: str, namemap: dict[str, str], errors: list, **kwds
+    ) -> object:
         """
         Visit a {trait} declared under {name}
         """
@@ -151,21 +162,19 @@ class Requirement(type):
             if not isinstance(alias, str):
                 # is a mistake
                 errors.append(TraitAliasError(trait=trait, value=alias))
-                # that is left out
+                # that is ignored
                 continue
-            # an empty one
+            # an empty string
             if not alias:
-                # is a mistake too
+                # is also a mistake
                 errors.append(TraitEmptyAliasError(trait=trait))
-                # that is left out
+                # that is ignored
                 continue
             # the rest are kept
             repaired.add(alias)
         # hand the repaired set back to the trait
         trait.aliases = repaired
 
-        # get my namemap
-        namemap = self._p2x_namemap
         # go through the aliases of the trait
         for alias in repaired:
             # if another trait in my body already answers to this one
