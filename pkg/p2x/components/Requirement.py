@@ -111,6 +111,14 @@ class Requirement(type):
         # hand off the populated {namemap}
         return namemap
 
+    # trait values
+    def _p2x_read(self, *, trait: typing.Any) -> object:
+        """
+        Look up the value of {trait} in my class record
+        """
+        # no class holds a value of its own yet, so every read ends at the default of {trait}
+        return trait.default
+
     # trait recognition
     def _p2x_onMalformed(self, trait: typing.Any, errors: list, **kwds) -> object:
         """

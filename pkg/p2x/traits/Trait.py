@@ -66,6 +66,13 @@ class Trait:
         return
 
     # the descriptor protocol
+    def __get__(self, instance: object, owner: type) -> object:
+        """
+        Look up my value in {owner}
+        """
+        # {owner} knows its values
+        return owner._p2x_read(trait=self)
+
     def __set_name__(self, owner: type, name: str) -> None:
         """
         Learn the {name} under which i am declared in the body of {owner}

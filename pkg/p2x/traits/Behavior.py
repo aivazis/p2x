@@ -66,8 +66,8 @@ class Behavior(Trait):
         """
         # when accessed through the class
         if instance is None:
-            # hand over the method itself
-            return self.default
+            # let my superclass ask the class for my method
+            return super().__get__(instance, owner)
         # otherwise, bind it to {instance}
         return self.default.__get__(instance, owner)
 
