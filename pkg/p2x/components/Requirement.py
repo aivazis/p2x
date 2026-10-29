@@ -117,7 +117,19 @@ class Requirement(type):
         """
         Look up the value of {trait} in my class record
         """
-        # no class holds a value of its own yet, so every read ends at the default of {trait}
+        # go through my ancestors, in {mro} order
+        for base in self.__mro__:
+            # asking for their values; carefully, because not all bases hold values
+            slots = vars(base).get("_p2x_slots", {})
+            # if this one has a value of its own for {trait}
+            if trait.name in slots:
+                # it's the nearest, so it's mine
+                return slots[trait.name].value
+            # no class above the one that declares {trait} can hold a value for it
+            if base is trait.owner:
+                # so stop looking
+                break
+        # if nobody has a value, read the default of {trait}
         return trait.default
 
     # trait recognition
