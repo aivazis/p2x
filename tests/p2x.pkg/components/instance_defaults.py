@@ -48,8 +48,10 @@ def test() -> None:
     assert "depth" not in saw.__dict__
     assert "bevel" not in saw.__dict__
 
-    # reading through the class still hands over the trait, which keeps the default
-    assert PanelSaw.kerf.default == 3.2
+    # reading through the class gives the default as well
+    assert PanelSaw.kerf == 3.2
+    # and the trait still keeps it
+    assert PanelSaw._p2x_trait("kerf").default == 3.2
 
     # all done
     return

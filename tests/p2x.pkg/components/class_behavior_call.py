@@ -11,6 +11,7 @@ Calling a behavior through its class runs the method it decorates
 """
 
 # support
+import p2x.components
 import p2x.traits
 
 
@@ -20,8 +21,8 @@ def test() -> None:
     Call a decorated method through the class, the way a subclass reaches its base
     """
 
-    # a saw, kept simple so no metaclass takes part
-    class Saw:
+    # a saw
+    class Saw(p2x.components.component):
         """
         A saw
         """

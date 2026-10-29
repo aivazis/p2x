@@ -30,9 +30,11 @@ def test() -> None:
         # the width of the cut
         kerf = p2x.traits.properties.float()
 
-    # the class hands over the trait, which knows the name it was declared under
-    assert isinstance(PanelSaw.kerf, p2x.traits.properties.float)
-    assert PanelSaw.kerf.name == "kerf"
+    # the class keeps the trait
+    kerf = PanelSaw._p2x_trait("kerf")
+    # which knows the name it was declared under
+    assert isinstance(kerf, p2x.traits.properties.float)
+    assert kerf.name == "kerf"
 
     # make two saws
     thin = PanelSaw()
