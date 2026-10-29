@@ -7,7 +7,7 @@
 
 
 """
-Watch the properties of protocols as Role visits them, in the order they are declared
+Verify that protocol classes find their traits, by name and by alias
 """
 
 # support
@@ -18,7 +18,7 @@ import p2x.traits.properties
 # the test
 def test() -> None:
     """
-    Declare two protocols with nothing but properties, one derived from the other
+    Declare a protocol and look up its trait
     """
 
     # the shop's specification of a saw
@@ -29,17 +29,13 @@ def test() -> None:
 
         # the width of the cut
         kerf = p2x.traits.properties.float()
-        # how deep it can cut
-        depth = p2x.traits.properties.float()
+        # also known by another name
+        kerf.aliases |= {"cut-width"}
 
-    # a saw that runs along a rail adds a requirement of its own
-    class TrackSaw(Saw):
-        """
-        A saw that runs along a rail
-        """
-
-        # the length of the rail
-        rail = p2x.traits.properties.float()
+    # the trait is found under its name
+    assert Saw._p2x_trait("kerf") is Saw.__dict__["kerf"]
+    # and its alias
+    assert Saw._p2x_trait("cut-width") is Saw.__dict__["kerf"]
 
     # all done
     return

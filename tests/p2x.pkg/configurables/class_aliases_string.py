@@ -7,7 +7,7 @@
 
 
 """
-Watch the properties of components as Actor visits them, in the order they are declared
+Verify that a single string given as the aliases of a trait is one alias, not a pile of letters
 """
 
 # support
@@ -18,28 +18,22 @@ import p2x.traits.properties
 # the test
 def test() -> None:
     """
-    Declare two components with nothing but properties, one derived from the other
+    Give a trait a single alias as a plain string
     """
 
     # a saw for cutting panels
-    class PanelSaw(p2x.components.component):
+    class PanelSaw(p2x.components.configurable):
         """
         A saw for cutting sheet goods
         """
 
         # the width of the cut
         kerf = p2x.traits.properties.float()
-        # how deep it can cut
-        depth = p2x.traits.properties.float()
+        # also known by another name
+        kerf.aliases = "cut-width"
 
-    # the same saw, mounted on a rail, adds a setting of its own
-    class TrackSaw(PanelSaw):
-        """
-        A panel saw that runs along a rail
-        """
-
-        # the length of the rail
-        rail = p2x.traits.properties.float()
+    # the trait answers to its name and the whole string
+    assert PanelSaw.__dict__["kerf"].aliases == {"kerf", "cut-width"}
 
     # all done
     return
