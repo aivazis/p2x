@@ -21,14 +21,18 @@ class Trait:
     # metamethods
     def __init__(self, default: object = None, **kwds) -> None:
         """
-        Make a trait whose value is {default} until something else is assigned to it
+        Build a trait descriptor
         """
         # chain up
         super().__init__(**kwds)
+        # the class that declares me
+        self.owner: type | None = None
         # my name
         self.name: str | None = None
         # my default value
         self.default = default
+        # my alternative names
+        self.aliases: set[str] = set()
         # all done
         return
 
@@ -37,7 +41,13 @@ class Trait:
         """
         Learn the {name} under which i am declared in the body of {owner}
         """
-        # remember it
+        # i belong to the first declaration that binds me, and the metaclass reports any other
+        if self.owner is not None:
+            # so i keep the identity i already have
+            return
+        # otherwise, remember who declares me
+        self.owner = owner
+        # and under what name
         self.name = name
         # all done
         return

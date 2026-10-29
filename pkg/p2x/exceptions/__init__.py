@@ -17,5 +17,14 @@ from .NotAVisitorError import NotAVisitorError
 
 # declaring traits
 from .BehaviorError import BehaviorError
+from .TraitAliasError import TraitAliasError
+from .TraitEmptyAliasError import TraitEmptyAliasError
+from .TraitAliasCollisionError import TraitAliasCollisionError
+from .TraitAliasAttributeCollisionError import TraitAliasAttributeCollisionError
+from .TraitRedeclarationError import TraitRedeclarationError
+from .TraitReuseError import TraitReuseError
+
+# looking up traits
+from .TraitNotFoundError import TraitNotFoundError
 
 # end of file

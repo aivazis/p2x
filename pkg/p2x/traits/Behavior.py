@@ -52,7 +52,7 @@ class Behavior(Trait):
 
     def __init__(self, default: typing.Callable | None = None, **kwds) -> None:
         """
-        Make a behavior whose implementation is {default}, the method it decorates
+        Build a behavior descriptor
         """
         # chain up
         super().__init__(default=default, **kwds)
