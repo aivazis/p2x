@@ -5,8 +5,19 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # configurables
+    from ..components.Configurable import Configurable
+
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait whose value could not be read
@@ -20,7 +31,7 @@ class TraitReadError(P2XError, RuntimeError):
     description = "'{error.configurable.__name__}.{error.trait.name}' could not be read"
 
     # metamethods
-    def __init__(self, *, configurable: type, trait: object, **kwds) -> None:
+    def __init__(self, *, configurable: type[Configurable], trait: Trait, **kwds) -> None:
         """
         Record the {trait} whose value {configurable} could not read
         """

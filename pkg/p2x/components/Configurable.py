@@ -8,6 +8,9 @@
 # the error raised when an alias is not recognized
 from ..exceptions import TraitNotFoundError
 
+# the traits i look up
+from ..traits.Trait import Trait
+
 # my metaclass
 from .Requirement import Requirement
 
@@ -20,7 +23,7 @@ class Configurable(metaclass=Requirement):
 
     # trait lookup
     @classmethod
-    def _p2x_trait(cls, alias: str) -> object:
+    def _p2x_trait(cls, alias: str) -> Trait:
         """
         Given an {alias}, attempt to look up the associated trait descriptor
         """

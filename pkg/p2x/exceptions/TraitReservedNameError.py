@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait that answers to a name the framework reserves
@@ -19,7 +27,7 @@ class TraitReservedNameError(P2XError, ValueError):
     description = "'{error.name}' is reserved"
 
     # metamethods
-    def __init__(self, *, trait: object, name: str, **kwds) -> None:
+    def __init__(self, *, trait: Trait, name: str, **kwds) -> None:
         """
         Record the {trait} that answers to the reserved {name}
         """

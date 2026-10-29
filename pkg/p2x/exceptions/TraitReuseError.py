@@ -5,8 +5,19 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # configurables
+    from ..components.Configurable import Configurable
+
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait that already belongs to a declaration, bound again elsewhere
@@ -22,7 +33,9 @@ class TraitReuseError(P2XError, TypeError):
     )
 
     # metamethods
-    def __init__(self, *, trait: object, configurable: type, name: str, **kwds) -> None:
+    def __init__(
+        self, *, trait: Trait, configurable: type[Configurable], name: str, **kwds
+    ) -> None:
         """
         Record the {trait}, which knows the declaration it belongs to, and the {configurable}
         that bound it again under {name}

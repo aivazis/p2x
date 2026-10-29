@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # two traits in the body of one class that answer to the same alias
@@ -22,7 +30,7 @@ class TraitAliasCollisionError(P2XError, TypeError):
     )
 
     # metamethods
-    def __init__(self, *, alias: str, owner: object, rival: object, **kwds) -> None:
+    def __init__(self, *, alias: str, owner: Trait, rival: Trait, **kwds) -> None:
         """
         Record the {alias}, the {owner} that answered to it first, and the {rival} declared
         after it that tried to

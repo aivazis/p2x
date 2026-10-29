@@ -7,7 +7,6 @@
 
 # externals
 import collections.abc
-import typing
 
 # the errors in the declarations and lookups of traits
 from ..exceptions import (
@@ -20,6 +19,10 @@ from ..exceptions import (
     TraitReservedNameError,
     TraitReuseError,
 )
+
+# the traits i visit and read
+from ..traits.Trait import Trait
+from ..traits.Malformed import Malformed
 
 # the storage for the declarations in a class body
 from .SymbolTable import SymbolTable
@@ -144,7 +147,7 @@ class Requirement(type):
         return namemap
 
     # trait values
-    def _p2x_read(self, *, trait: typing.Any) -> object:
+    def _p2x_read(self, *, trait: Trait) -> object:
         """
         Look up the value of {trait} in my class record
         """
@@ -164,7 +167,7 @@ class Requirement(type):
         return trait.default
 
     # trait recognition
-    def _p2x_onMalformed(self, trait: typing.Any, errors: list, **kwds) -> object:
+    def _p2x_onMalformed(self, trait: Malformed, errors: list[Exception], **kwds) -> Malformed:
         """
         Set aside the error carried by a malformed {trait}
         """
@@ -174,8 +177,8 @@ class Requirement(type):
         return trait
 
     def _p2x_onTrait(
-        self, trait: typing.Any, name: str, namemap: dict[str, str], errors: list, **kwds
-    ) -> object:
+        self, trait: Trait, name: str, namemap: dict[str, str], errors: list[Exception], **kwds
+    ) -> Trait:
         """
         Visit a {trait} declared under {name}
         """

@@ -5,11 +5,11 @@
 # (c) 1998-2026 all rights reserved
 
 
-# externals
-import typing
-
 # the error raised when a trait is declared more than once
 from ..exceptions import TraitRedeclarationError
+
+# the traits i recognize
+from ..traits.Trait import Trait
 
 
 # the storage in which the body of a configurable accumulates its declarations
@@ -63,7 +63,7 @@ class SymbolTable(dict):
         return identify(value, authority=self)
 
     # visiting
-    def _p2x_onTrait(self, trait: typing.Any, **kwds) -> bool:
+    def _p2x_onTrait(self, trait: Trait, **kwds) -> bool:
         """
         Acknowledge a {trait}
         """

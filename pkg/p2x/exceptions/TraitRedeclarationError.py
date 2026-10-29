@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a name bound to a trait that is bound again in the body of the same class
@@ -19,7 +27,7 @@ class TraitRedeclarationError(P2XError, TypeError):
     description = "'{error.name}' is declared more than once"
 
     # metamethods
-    def __init__(self, *, name: str, original: object, replacement: object, **kwds) -> None:
+    def __init__(self, *, name: str, original: Trait, replacement: object, **kwds) -> None:
         """
         Record the {name} that was bound again, the {original} trait it held, and the
         {replacement} bound to it later

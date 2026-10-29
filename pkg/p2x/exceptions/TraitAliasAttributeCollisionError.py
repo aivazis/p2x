@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait alias that names a plain attribute in the body of the same class
@@ -23,7 +31,7 @@ class TraitAliasAttributeCollisionError(P2XError, TypeError):
     )
 
     # metamethods
-    def __init__(self, *, alias: str, trait: object, value: object, **kwds) -> None:
+    def __init__(self, *, alias: str, trait: Trait, value: object, **kwds) -> None:
         """
         Record the {alias}, the {trait} that answers to it, and the {value} of the attribute that
         holds the name

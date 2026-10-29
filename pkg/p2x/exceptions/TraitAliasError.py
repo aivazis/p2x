@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait given an alias that is not a string
@@ -22,7 +30,7 @@ class TraitAliasError(P2XError, TypeError):
     )
 
     # metamethods
-    def __init__(self, *, trait: object, value: object, **kwds) -> None:
+    def __init__(self, *, trait: Trait, value: object, **kwds) -> None:
         """
         Record the {trait} and the {value} it was given as an alias
         """

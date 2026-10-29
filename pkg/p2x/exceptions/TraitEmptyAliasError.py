@@ -5,8 +5,16 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the superclass
 from .P2XError import P2XError
+
+# the types in my annotations, protected to avoid making cycles
+if typing.TYPE_CHECKING:
+    # traits
+    from ..traits.Trait import Trait
 
 
 # a trait given an empty string as an alias
@@ -19,7 +27,7 @@ class TraitEmptyAliasError(P2XError, ValueError):
     description = "'{error.trait.name}' has an empty alias"
 
     # metamethods
-    def __init__(self, *, trait: object, **kwds) -> None:
+    def __init__(self, *, trait: Trait, **kwds) -> None:
         """
         Record the {trait} that was given an empty alias
         """
