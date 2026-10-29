@@ -64,12 +64,14 @@ class Behavior(Trait):
         """
         Hand over my method as python does for functions: bound to {instance}, if there is one
         """
+        # let my superclass ask the class for my method
+        method = super().__get__(instance, owner)
         # when accessed through the class
         if instance is None:
-            # let my superclass ask the class for my method
-            return super().__get__(instance, owner)
+            # hand it over as is
+            return method
         # otherwise, bind it to {instance}
-        return self.default.__get__(instance, owner)
+        return method.__get__(instance, owner)
 
     # visiting
     def _p2x_identify(self, authority: typing.Any, **kwds) -> object:
