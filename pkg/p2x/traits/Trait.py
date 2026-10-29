@@ -11,6 +11,12 @@ import typing
 # the error raised when a visitor has no handler for me
 from ..exceptions import NotAVisitorError
 
+# the record of where my default was set
+from .. import tracking
+
+# the holder of my default
+from .Slot import Slot
+
 
 # the base class of the typed attributes of components and protocols
 class Trait:
@@ -29,10 +35,33 @@ class Trait:
         self.owner: type | None = None
         # my name
         self.name: str | None = None
-        # my default value
-        self.default = default
         # my alternative names
         self.aliases: set[str] = set()
+
+        # build a slot for my default value
+        self._p2x_slot = Slot(value=default, locator=tracking.unknown())
+
+        # all done
+        return
+
+    # my default value
+    @property
+    def default(self) -> object:
+        """
+        Get my default value
+        """
+        # it lives in my slot
+        return self._p2x_slot.value
+
+    @default.setter
+    def default(self, value: object) -> None:
+        """
+        Set my default to {value}
+        """
+        # replace the contents of my slot
+        self._p2x_slot.value = value
+        # and remember the line that asked for it
+        self._p2x_slot.locator = tracking.here(level=1)
         # all done
         return
 

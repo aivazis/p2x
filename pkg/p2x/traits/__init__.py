@@ -16,4 +16,7 @@ from .Property import Property as property
 # the methods that are part of the external interface of their owners
 from .Behavior import Behavior as behavior
 
+# the holders of trait values
+from .Slot import Slot as slot
+
 # end of file
