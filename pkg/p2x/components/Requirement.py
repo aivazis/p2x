@@ -15,6 +15,7 @@ from ..exceptions import (
     TraitAliasCollisionError,
     TraitAliasError,
     TraitEmptyAliasError,
+    TraitReservedNameError,
     TraitReuseError,
 )
 
@@ -185,6 +186,12 @@ class Requirement(type):
 
         # go through the aliases of the trait
         for alias in repaired:
+            # the framework keeps names with its prefix for itself
+            if alias.startswith("_p2x_"):
+                # so taking one is a mistake
+                errors.append(TraitReservedNameError(trait=trait, name=alias))
+                # and the name stays out of my namemap
+                continue
             # if another trait in my body already answers to this one
             if alias in namemap:
                 # sharing it is a mistake

@@ -21,6 +21,7 @@ from .TraitAliasError import TraitAliasError
 from .TraitEmptyAliasError import TraitEmptyAliasError
 from .TraitAliasCollisionError import TraitAliasCollisionError
 from .TraitAliasAttributeCollisionError import TraitAliasAttributeCollisionError
+from .TraitReservedNameError import TraitReservedNameError
 from .TraitRedeclarationError import TraitRedeclarationError
 from .TraitReuseError import TraitReuseError
 
