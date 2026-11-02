@@ -190,12 +190,8 @@ class Requirement(type):
             # and there is nothing more to learn from it
             return trait
 
-        # the declaration may have left its aliases in any shape
+        # the trait gathers its aliases in a set, unless the declaration gave it something else
         aliases = trait.aliases
-        # a single string is a single alias
-        if isinstance(aliases, str):
-            # not a pile of letters
-            aliases = (aliases,)
         # a mapping would contribute only its keys
         if isinstance(aliases, collections.abc.Mapping):
             # so refuse it whole

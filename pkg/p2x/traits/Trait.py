@@ -6,6 +6,7 @@
 
 
 # externals
+import collections.abc
 import typing
 
 # the error raised when a visitor has no handler for me
@@ -38,8 +39,9 @@ class Trait:
         self.owner: type | None = None
         # my name
         self.name: str | None = None
-        # my alternative names
-        self.aliases: set[str] = set()
+        # my alternative names; a mistaken declaration leaves them as given, for the class
+        # that declares me to refuse
+        self._p2x_aliases: typing.Any = set()
 
         # build a slot for my default value
         self._p2x_slot = Slot(value=default, locator=tracking.unknown())
@@ -65,6 +67,47 @@ class Trait:
         self._p2x_slot.value = value
         # and remember the line that asked for it
         self._p2x_slot.locator = tracking.here(level=1)
+        # all done
+        return
+
+    # my alternative names
+    @property
+    def aliases(self) -> set[str]:
+        """
+        Get my alternative names
+        """
+        # they live in a set, unless a mistaken declaration left them as given
+        return self._p2x_aliases
+
+    @aliases.setter
+    def aliases(self, value: str | collections.abc.Iterable[str]) -> None:
+        """
+        Set my alternative names to {value}, a single name or a collection of them
+        """
+        # a single string is a single alias, not a pile of letters
+        if isinstance(value, str):
+            # so it makes a set of one
+            self._p2x_aliases = {value}
+            # and there is nothing more to do
+            return
+        # a mapping and anything that isn't a collection are mistakes
+        if isinstance(value, collections.abc.Mapping) or not isinstance(
+            value, collections.abc.Iterable
+        ):
+            # held as given, for the class that declares me to refuse
+            self._p2x_aliases = value
+            # and there is nothing more to do
+            return
+        # gather the names once, since {value} may be consumed by reading it
+        names = tuple(value)
+        # if they are all strings
+        if all(isinstance(name, str) for name in names):
+            # they make a set
+            self._p2x_aliases = set(names)
+            # and there is nothing more to do
+            return
+        # otherwise, they are held as given, in order, for the class that declares me to sort out
+        self._p2x_aliases = names
         # all done
         return
 
