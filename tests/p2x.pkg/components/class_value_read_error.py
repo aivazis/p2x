@@ -55,7 +55,7 @@ def test() -> None:
         """
 
         # my default value
-        @property
+        @p2x.traits.property.default.getter
         def default(self) -> object:
             """
             Look up my default
@@ -72,7 +72,7 @@ def test() -> None:
         # the service that holds the products
         provider = Late()
         # also known by another name
-        provider.aliases = "storage"
+        provider.aliases = {"storage"}
 
     # reading it fails, under its name and its alias, without passing for a missing attribute
     assert unreadable(Archive, "provider")
