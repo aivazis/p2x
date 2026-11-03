@@ -7,7 +7,8 @@
 
 
 """
-Verify that a class read of a trait that was never set follows changes to the trait's default
+Verify that a configurable reads the current default of a trait, including one changed after the
+class is built
 """
 
 # support
@@ -18,11 +19,11 @@ import p2x.traits.properties
 # the test
 def test() -> None:
     """
-    Change the default of a trait after its component is declared
+    Change the default of a trait after its configurable is declared
     """
 
     # a saw for cutting panels
-    class PanelSaw(p2x.components.component):
+    class PanelSaw(p2x.components.configurable):
         """
         A saw for cutting sheet goods
         """
@@ -31,6 +32,8 @@ def test() -> None:
         kerf = p2x.traits.properties.float()
         # with a preferred value
         kerf.default = 0.125
+        # also known by another name
+        kerf.aliases |= {"cut-width"}
 
     # the same saw, mounted on a rail
     class TrackSaw(PanelSaw):
@@ -38,12 +41,13 @@ def test() -> None:
         A panel saw that runs along a rail
         """
 
-    # change the default
+    # change the default of the trait, after both saws are built
     PanelSaw._p2x_trait("kerf").default = 0.25
 
-    # nobody has set a value, so both read the new default
-    assert PanelSaw.kerf == 0.25
-    assert TrackSaw.kerf == 0.25
+    # both saws read the new one, under the name and the alias
+    for saw in (PanelSaw, TrackSaw):
+        assert saw.kerf == 0.25
+        assert getattr(saw, "cut-width") == 0.25
 
     # all done
     return

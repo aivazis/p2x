@@ -7,7 +7,7 @@
 
 
 """
-Verify that a class read under an alias gives the value of the trait that answers to it
+Verify that a component reads, under an alias, the value that a write under the name gave the trait
 """
 
 # support
@@ -18,7 +18,7 @@ import p2x.traits.properties
 # the test
 def test() -> None:
     """
-    Read the value of a trait through the class, under its alias, before and after it is set
+    Set the value of a trait under its name, and read it through the class under its alias
     """
 
     # a saw for cutting panels
@@ -39,10 +39,6 @@ def test() -> None:
         """
         A panel saw that runs along a rail
         """
-
-    # the alias reads the default, in the declaring class and below it
-    assert getattr(PanelSaw, "cut-width") == 0.125
-    assert getattr(TrackSaw, "cut-width") == 0.125
 
     # set the value under the name, in the derived saw
     TrackSaw.kerf = 0.25

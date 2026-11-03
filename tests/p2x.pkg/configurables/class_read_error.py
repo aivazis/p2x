@@ -63,8 +63,8 @@ def test() -> None:
             # it names something that isn't there
             return archives.S3
 
-    # a component with such a trait
-    class Archive(p2x.components.component):
+    # a configurable with such a trait
+    class Archive(p2x.components.configurable):
         """
         A store of data products
         """
