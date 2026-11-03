@@ -112,7 +112,7 @@ class Trait:
         return
 
     # the descriptor protocol
-    def __get__(self, instance: object, owner: type) -> object:
+    def __get__(self, instance: object, owner: type) -> typing.Any:
         """
         Look up my value in {owner}
         """

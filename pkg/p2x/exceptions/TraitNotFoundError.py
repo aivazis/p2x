@@ -13,8 +13,8 @@ from .P2XError import P2XError
 
 # the types in my annotations, protected to avoid making cycles
 if typing.TYPE_CHECKING:
-    # configurable
-    from ..components.Configurable import Configurable
+    # the metaclass of configurables
+    from ..components.Requirement import Requirement
 
 
 # a name that none of the traits of a configurable answers to
@@ -27,7 +27,7 @@ class TraitNotFoundError(P2XError, LookupError):
     description = "'{error.configurable.__name__}' has no setting named '{error.alias}'"
 
     # metamethods
-    def __init__(self, *, configurable: type[Configurable], alias: str, **kwds) -> None:
+    def __init__(self, *, configurable: Requirement, alias: str, **kwds) -> None:
         """
         Record the {configurable} that was searched and the {alias} it did not recognize
         """

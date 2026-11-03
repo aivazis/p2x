@@ -6,7 +6,7 @@
 
 
 # support
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 
 # the superclass
 from .P2XError import P2XError
@@ -58,7 +58,7 @@ class BehaviorError(P2XError, TypeError):
         # the behavior is anonymous until it is placed in the body of a class
         self.behavior = "a behavior"
         # and the method it was meant to decorate shows up only if it was used as a decorator
-        self.method = None
+        self.method: Callable | None = None
         # all done
         return
 

@@ -27,6 +27,10 @@ class Actor(Requirement):
     The type of all classes that provide implementations of application requirements
     """
 
+    # the framework state of the classes i build: the slots that hold the values they set for
+    # their traits
+    _p2x_slots: dict[str, Slot]
+
     # metamethods
     def __new__(
         cls, name: str, bases: tuple[type, ...], attributes: collections.abc.Mapping, **kwds

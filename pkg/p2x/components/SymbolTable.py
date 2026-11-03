@@ -5,6 +5,9 @@
 # (c) 1998-2026 all rights reserved
 
 
+# externals
+import typing
+
 # the error raised when a trait is declared more than once
 from ..exceptions import TraitRedeclarationError
 
@@ -47,7 +50,7 @@ class SymbolTable(dict):
         return
 
     # implementation details
-    def _p2x_isTrait(self, value: object) -> bool:
+    def _p2x_isTrait(self, value: typing.Any) -> bool:
         """
         Check whether {value} is a trait
         """

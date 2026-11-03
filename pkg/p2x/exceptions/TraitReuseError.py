@@ -13,8 +13,8 @@ from .P2XError import P2XError
 
 # the types in my annotations, protected to avoid making cycles
 if typing.TYPE_CHECKING:
-    # configurable
-    from ..components.Configurable import Configurable
+    # the metaclass of configurables
+    from ..components.Requirement import Requirement
 
     # traits
     from ..traits.Trait import Trait
@@ -33,9 +33,7 @@ class TraitReuseError(P2XError, TypeError):
     )
 
     # metamethods
-    def __init__(
-        self, *, trait: Trait, configurable: type[Configurable], name: str, **kwds
-    ) -> None:
+    def __init__(self, *, trait: Trait, configurable: Requirement, name: str, **kwds) -> None:
         """
         Record the {trait}, which knows the declaration it belongs to, and the {configurable}
         that bound it again under {name}

@@ -19,7 +19,7 @@ class Property(Trait):
     """
 
     # the descriptor protocol
-    def __get__(self, instance: object, owner: type) -> object:
+    def __get__(self, instance: object, owner: type) -> typing.Any:
         """
         Look up my value in {instance}, or in {owner} when {instance} has none of its own
         """

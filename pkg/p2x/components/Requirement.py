@@ -7,6 +7,7 @@
 
 # externals
 import collections.abc
+import typing
 
 # the errors in the declarations and lookups of traits
 from ..exceptions import (
@@ -33,6 +34,10 @@ class Requirement(type):
     """
     The type of all classes that help capture application requirements and their implementations
     """
+
+    # the framework state of the classes i build: the map from the names of their traits to the
+    # names they are declared under
+    _p2x_namemap: dict[str, str]
 
     # metamethods
     @classmethod
@@ -77,7 +82,7 @@ class Requirement(type):
         # all done
         return record
 
-    def __getattr__(self, name: str) -> object:
+    def __getattr__(self, name: str) -> typing.Any:
         """
         Read the value of the trait that answers to {name}, when python finds nothing by that name
         """

@@ -13,8 +13,8 @@ from .P2XError import P2XError
 
 # the types in my annotations, protected to avoid making cycles
 if typing.TYPE_CHECKING:
-    # configurable
-    from ..components.Configurable import Configurable
+    # the metaclass of configurables
+    from ..components.Requirement import Requirement
 
     # traits
     from ..traits.Trait import Trait
@@ -31,7 +31,7 @@ class TraitReadError(P2XError, RuntimeError):
     description = "'{error.configurable.__name__}.{error.trait.name}' could not be read"
 
     # metamethods
-    def __init__(self, *, configurable: type[Configurable], trait: Trait, **kwds) -> None:
+    def __init__(self, *, configurable: Requirement, trait: Trait, **kwds) -> None:
         """
         Record the {trait} whose value {configurable} could not read
         """
