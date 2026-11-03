@@ -40,7 +40,9 @@ def test() -> None:
     assert TrackSaw.__name__ == "TrackSaw"
     assert TrackSaw.__qualname__ == "test.<locals>.TrackSaw"
     assert TrackSaw.__module__ == __name__
-    # the documentation
+    # the documentation, which is there
+    assert TrackSaw.__doc__ is not None
+    # and reads as declared
     assert TrackSaw.__doc__.strip() == "A panel saw that runs along a rail"
     # the derivation
     assert TrackSaw.__bases__ == (PanelSaw,)

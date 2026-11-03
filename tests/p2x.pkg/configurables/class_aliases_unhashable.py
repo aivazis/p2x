@@ -11,6 +11,9 @@ Verify that an alias of a trait that cannot belong to a set is reported like any
 is not a string
 """
 
+# externals
+import typing
+
 # support
 import p2x.components
 import p2x.exceptions
@@ -24,6 +27,8 @@ def test() -> None:
     """
     # the mistaken alias
     mistake = ["width"]
+    # among the aliases, of any type, so the type checker lets the mistake through
+    aliases: typing.Any = ("cut-width", mistake)
     # attempt to
     try:
         # declare a saw for cutting panels
@@ -35,7 +40,7 @@ def test() -> None:
             # the width of the cut
             kerf = p2x.traits.properties.float()
             # with a good alias and one that is a list
-            kerf.aliases = "cut-width", mistake
+            kerf.aliases = aliases
 
     # the declaration is refused
     except ExceptionGroup as group:

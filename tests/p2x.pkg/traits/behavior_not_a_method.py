@@ -14,9 +14,13 @@ what it received and where
 # to read back the line a locator names
 import linecache
 
+# types
+import typing
+
 # support
 import p2x.components
 import p2x.exceptions
+import p2x.tracking
 import p2x.traits
 
 
@@ -25,6 +29,8 @@ def test() -> None:
     """
     Declare a behavior whose implementation is a number
     """
+    # the number, of any type, so the type checker lets the mistake through
+    mistake: typing.Any = 60
     # attempt to
     try:
         # declare a saw for cutting panels
@@ -34,7 +40,7 @@ def test() -> None:
             """
 
             # the number of teeth, mistaken for something the saw does
-            teeth = p2x.traits.behavior(60)
+            teeth = p2x.traits.behavior(mistake)
 
     # the declaration is refused
     except ExceptionGroup as group:
@@ -45,15 +51,20 @@ def test() -> None:
         # which knows its name
         assert error.behavior == "PanelSaw.teeth"
         # and what it received
-        assert error.value == 60
+        assert error.value is mistake
         # but has no method, since it decorates nothing
         assert error.method is None
-        # the declaration is in this file
-        assert error.locator.source == __file__
+        # the declaration is located in a script
+        locator = error.locator
+        assert isinstance(locator, p2x.tracking.script)
+        # this file
+        assert locator.source == __file__
         # in the body of the class
-        assert error.locator.function == "PanelSaw"
-        # on the line that holds the mistake
-        assert "behavior(60)" in linecache.getline(__file__, error.locator.line)
+        assert locator.function == "PanelSaw"
+        # on a known line
+        assert locator.line is not None
+        # the one that holds the mistake
+        assert "behavior(mistake)" in linecache.getline(__file__, locator.line)
         # all done
         return
 

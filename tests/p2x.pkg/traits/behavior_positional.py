@@ -14,9 +14,13 @@ and records what it received, the method it decorates, and where
 # to read back the line a locator names
 import linecache
 
+# types
+import typing
+
 # support
 import p2x.components
 import p2x.exceptions
+import p2x.tracking
 import p2x.traits
 
 
@@ -25,6 +29,8 @@ def test() -> None:
     """
     Make the common mistake of passing a behavior its description positionally
     """
+    # the factory of behaviors, of any type, so the type checker lets the mistaken call through
+    behavior: typing.Any = p2x.traits.behavior
     # attempt to
     try:
         # declare a saw for cutting panels
@@ -34,7 +40,7 @@ def test() -> None:
             """
 
             # cutting, with its description where the metadata should go
-            @p2x.traits.behavior("make a cut")
+            @behavior("make a cut")
             def cut(self) -> None:
                 """
                 Make a cut
@@ -51,13 +57,18 @@ def test() -> None:
         # what it received
         assert error.value == "make a cut"
         # and the method it was placed in front of
-        assert error.method.__name__ == "cut"
-        # the declaration is in this file
-        assert error.locator.source == __file__
+        assert error.method is not None and error.method.__name__ == "cut"
+        # the declaration is located in a script
+        locator = error.locator
+        assert isinstance(locator, p2x.tracking.script)
+        # this file
+        assert locator.source == __file__
         # in the body of the class
-        assert error.locator.function == "PanelSaw"
-        # on the line that holds the mistake
-        assert 'behavior("make a cut")' in linecache.getline(__file__, error.locator.line)
+        assert locator.function == "PanelSaw"
+        # on a known line
+        assert locator.line is not None
+        # the one that holds the mistake
+        assert 'behavior("make a cut")' in linecache.getline(__file__, locator.line)
         # all done
         return
 

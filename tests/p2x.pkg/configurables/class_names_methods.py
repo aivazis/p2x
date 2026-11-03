@@ -83,7 +83,7 @@ def test() -> None:
     assert PanelSaw.cut is PanelSaw.__dict__["cut"]
     assert TrackSaw.cut is PanelSaw.__dict__["cut"]
     # and it can be called with an explicit instance
-    assert PanelSaw.cut(None, length=3.2) == "cut 3.2"
+    assert PanelSaw.cut(PanelSaw(), length=3.2) == "cut 3.2"
     # class methods bind to the class they are reached through, and chain up
     assert PanelSaw.model() == "PanelSaw"
     assert TrackSaw.model() == "track TrackSaw"

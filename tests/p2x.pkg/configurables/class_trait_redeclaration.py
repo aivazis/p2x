@@ -50,7 +50,8 @@ def test() -> None:
         assert error.name == "kerf"
         # the trait declared first
         assert error.original.default == 0.125
-        # and the one that took its place
+        # and the one that took its place, a trait as well
+        assert isinstance(error.replacement, p2x.traits.property)
         assert error.replacement.default == 0.25
         # all done
         return

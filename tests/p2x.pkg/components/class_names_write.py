@@ -73,8 +73,9 @@ def test() -> None:
     # is a plain attribute
     TrackSaw.cut = cut
     assert vars(TrackSaw)["cut"] is cut
-    # that binds to instances, as python does
-    assert TrackSaw().cut(length=3.2) == "cut 3.2"
+    # that binds to instances, as python does; it is reached by name, since the class body
+    # never declared it
+    assert getattr(TrackSaw(), "cut")(length=3.2) == "cut 3.2"
 
     # names of the framework land in the class that was written
     TrackSaw._p2x_marker = "framework"

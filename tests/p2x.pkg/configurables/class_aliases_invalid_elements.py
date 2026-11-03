@@ -10,6 +10,9 @@
 Verify that every alias of a trait that is not a string is reported, each in an error of its own
 """
 
+# externals
+import typing
+
 # support
 import p2x.components
 import p2x.exceptions
@@ -21,6 +24,9 @@ def test() -> None:
     """
     Give a trait aliases with two mistakes among them
     """
+    # a good alias and two that are not strings, of any type, so the type checker lets the
+    # mistakes through
+    aliases: typing.Any = ("cut-width", 3.5, None)
     # attempt to
     try:
         # declare a saw for cutting panels
@@ -31,8 +37,8 @@ def test() -> None:
 
             # the width of the cut
             kerf = p2x.traits.properties.float()
-            # with a good alias and two that are not strings
-            kerf.aliases = "cut-width", 3.5, None
+            # with the mistaken aliases
+            kerf.aliases = aliases
 
     # the declaration is refused
     except ExceptionGroup as group:

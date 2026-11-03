@@ -10,6 +10,9 @@
 Verify that aliases that are neither a string nor a collection of strings refuse the declaration
 """
 
+# externals
+import typing
+
 # support
 import p2x.components
 import p2x.exceptions
@@ -21,6 +24,8 @@ def test() -> None:
     """
     Give a trait a number as its aliases
     """
+    # the mistaken aliases, of any type, so the type checker lets the mistake through
+    mistake: typing.Any = 3.5
     # attempt to
     try:
         # declare a saw for cutting panels
@@ -32,7 +37,7 @@ def test() -> None:
             # the width of the cut
             kerf = p2x.traits.properties.float()
             # with a number where its aliases go
-            kerf.aliases = 3.5
+            kerf.aliases = mistake
 
     # the declaration is refused
     except ExceptionGroup as group:
@@ -43,7 +48,7 @@ def test() -> None:
         # of this trait
         assert error.trait.name == "kerf"
         # which is not a string
-        assert error.value == 3.5
+        assert error.value is mistake
         # all done
         return
 

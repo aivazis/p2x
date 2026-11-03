@@ -15,6 +15,7 @@ body or not
 import sys
 
 # support
+import p2x.tracking
 import p2x.traits.properties
 
 
@@ -39,7 +40,8 @@ def test() -> None:
 
     # get the locator of the default
     locator = Saw.__dict__["kerf"]._p2x_slot.locator
-    # it records the assignment in the class body
+    # it records the assignment in the class body, in a script
+    assert isinstance(locator, p2x.tracking.script)
     assert locator.source == __file__
     assert locator.line == Saw.line
     assert locator.function == "Saw"
@@ -53,7 +55,8 @@ def test() -> None:
 
     # get the locator of the default
     locator = depth._p2x_slot.locator
-    # it records the assignment in this function
+    # it records the assignment in this function, in a script
+    assert isinstance(locator, p2x.tracking.script)
     assert locator.source == __file__
     assert locator.line == line
     assert locator.function == "test"

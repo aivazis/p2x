@@ -15,6 +15,7 @@ import sys
 
 # support
 import p2x.components
+import p2x.tracking
 import p2x.traits.properties
 
 
@@ -42,7 +43,8 @@ def test() -> None:
 
     # get the locator of the value
     locator = PanelSaw._p2x_slots["kerf"].locator
-    # it records the write
+    # it records the write, in a script
+    assert isinstance(locator, p2x.tracking.script)
     assert locator.source == __file__
     assert locator.line == line
     assert locator.function == "test"
@@ -54,7 +56,8 @@ def test() -> None:
 
     # get the locator of the value
     locator = PanelSaw._p2x_slots["kerf"].locator
-    # it records the new write
+    # it records the new write, in a script
+    assert isinstance(locator, p2x.tracking.script)
     assert locator.source == __file__
     assert locator.line == line
     assert locator.function == "test"
