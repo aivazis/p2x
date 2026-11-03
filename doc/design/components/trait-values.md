@@ -32,12 +32,12 @@ Where values live:
    makes a plain attribute that shadows the inherited trait, as in python.
 4. Only components hold values. Writes, which give a class a slot of its own, belong to `Actor`.
    Names that start with `_p2x_` belong to the framework: `Actor` hands their writes and deletes
-   straight to python, without looking for a trait, since the framework writes them while the
-   class is being built and its namemap may not exist yet; no trait or alias may take such a
-   name. pyre 1.x does the same with `pyre_`, without the refusal.
-   A protocol trait is a specification of what an implementer must provide, and its default is
-   part of that specification. How protocols and components relate is examined once class state
-   is settled.
+   straight to python, without looking for a trait, since the framework writes them while the class
+   is being built and its namemap may not exist yet; no trait or alias may take such a name. pyre
+   1.x does the same with `pyre_` during attribute assignment and deletion, but it doesn't
+   complain when the traits are declared. A protocol trait is a specification of what an
+   implementer must provide, and its default is part of that specification. How protocols and
+   components relate is examined once class state is settled.
 
 Reading:
 
@@ -68,10 +68,9 @@ Reading and writing:
 10. A name that does not resolve to a trait, because no trait answers to it or because a plain
     attribute hides it, is read, written and deleted as python would.
 11. Values are held as given. Conversion arrives with the schemata.
-12. A class read of a behavior gives its default, the method it decorates, which is what python
-    gives for a method. A class write of a behavior gives the class a slot like any other trait,
-    and its descendants read the new method; no driver pins this down until instances are
-    designed.
+12. A class read of a behavior gives its value, at first the method it decorates, which is what
+    python gives for a method. A class write of a behavior gives the class a slot like any other
+    trait; its descendants read the new method, and their instances call it, bound to themselves.
 13. A class write records the line that made it, under the trait's name or an alias.
 
 ### Constraints
@@ -85,11 +84,160 @@ Reading and writing:
   observers.
 
 The drivers in `tests/p2x.pkg/components/class_value_*.py` pin down decisions 3, 6 through 10,
-and 13. The drivers `tests/p2x.pkg/configurables/class_names_*.py`, `components/class_names_write.py` and
-`components/instance_names.py` check that names that are not traits behave as python defines
-them, so the machinery that handles traits never disturbs the rest of a class.
+and 13. The drivers `tests/p2x.pkg/configurables/class_names_*.py`,
+`components/class_names_write.py` and `components/instance_names.py` check that names that are
+not traits behave as python defines them, so the machinery that handles traits never disturbs the
+rest of a class.
+
+### Class reads, case by case
+
+Reads belong to `Requirement`, so the drivers that read live in
+`tests/p2x.pkg/configurables/`, beside the lookups they mirror. A configurable holds no values, so
+these reads find defaults; reads of values that a write put in place stay with the components.
+The drivers read under names and aliases, through `getattr` for aliases that are not python
+identifiers, and check with `hasattr` that the names that read nothing are missing and that those
+of the plain cases are there.
+
+Each case names the decisions that settle it, the driver that reads, and the lookup it mirrors.
+
+- **A trait under its name**
+
+  The simplest read: a class reads the default of a trait it declares, under the name it declares
+  it by. Every other case is measured against this one.
+
+  Decision 6; `class_read_name`, mirroring `class_lookup_name`.
+
+- **A trait under its aliases**
+
+  The same read, under the other names of the trait. An alias that is a python identifier reads
+  with the dot, as the name does; one that is not reads through `getattr`. Both pass through
+  `Requirement.__getattr__`, since python finds nothing by those names in the class.
+
+  Decisions 6 and 7; `class_read_alias`, mirroring `class_lookup_alias`.
+
+- **An inherited trait**
+
+  A derived class reads the default of a trait declared by its ancestor, under its name and its
+  alias, beside a trait of its own. The read walks the `__mro__` to the declaring class and finds
+  no slot along the way.
+
+  Decision 6; `class_read_inherited`, mirroring `class_lookup_inherited`.
+
+- **A default changed after the class is built**
+
+  The default is not captured when the class is built: a change to it reaches the declaring class
+  and every class below it, under every name. This is what the trait's slot is for.
+
+  Decision 6; `class_read_default_live`.
+
+- **A behavior**
+
+  The trait is a method, and the class reads the method it decorates, as python gives a method
+  through its class, under the name and the alias of the behavior.
+
+  Decision 12; `class_read_behavior`, mirroring `class_lookup_behavior`.
+
+- **A redeclared trait**
+
+  A derived class declares a trait under the name of an inherited one, without its alias. It reads
+  its own default, not its ancestor's, and the alias of the replaced trait reaches nothing there;
+  the ancestor still reads its own default under both names.
+
+  Decisions 9 and 10; `class_read_redeclared`, mirroring `class_lookup_redeclared`.
+
+- **A diamond**
+
+  Two parents share an ancestor, and only the parent listed second redeclares a trait. python's
+  `__mro__` puts that parent ahead of the shared ancestor, so the class reads the default of the
+  redeclared trait, the alias of the replaced trait reaches nothing, and the trait of the first
+  parent reads as usual.
+
+  Decisions 6 and 9; `class_read_diamond`, mirroring `class_lookup_diamond`.
+
+- **A plain class ahead of a trait**
+
+  A class that is not a configurable, listed first among the bases, holds a plain attribute by the
+  name of an inherited trait. python finds the attribute first, so the class reads it under that
+  name, and the aliases of the hidden trait reach nothing.
+
+  Decision 10; `class_read_mixin_before`, mirroring `class_lookup_mixin_before`.
+
+- **A plain class behind a trait**
+
+  The same plain class, listed after the configurable. python finds the trait first, so the class
+  reads its default under the name and the alias, and the plain attribute is never seen.
+
+  Decision 6; `class_read_mixin_after`, mirroring `class_lookup_mixin_after`.
+
+- **A plain attribute over an inherited trait**
+
+  A derived class assigns a plain value to the name of an inherited trait in its body. The value
+  hides the trait under its name and all its aliases, in that class and every class below it,
+  while the ancestor still reads the default.
+
+  Decision 10; `class_read_shadowed_name`, mirroring `class_lookup_shadowed_name`.
+
+- **A plain attribute over an inherited alias**
+
+  The same, but the plain value takes one alias of the trait. Only that alias is hidden: it
+  reaches the plain value from there down, while the name and the other alias still read the
+  default.
+
+  Decision 10; `class_read_shadowed_alias`, mirroring `class_lookup_shadowed_alias`.
+
+- **Plain attributes and methods**
+
+  A constant and a method declared beside a trait read as python gives them, so the machinery for
+  traits leaves them alone.
+
+  Decision 10; `class_read_plain`, mirroring `class_lookup_plain`.
+
+- **A name nothing answers to**
+
+  A read under a name that is neither a trait nor an attribute raises the `AttributeError` python
+  raises, with its details, so `hasattr` and `getattr` with a fallback keep working.
+
+  Decision 10; `class_names_missing`, mirroring `class_lookup_unknown`.
+
+- **A default that cannot be read**
+
+  Reading the default fails with an `AttributeError` of its own, which python would take for a
+  missing name. The read reports a `TraitReadError` instead, under the name, under the alias and
+  through `hasattr`.
+
+  Decision 6; `class_read_error`.
+
+- **A protocol trait**
+
+  A protocol and a protocol derived from it read the default of the trait, under its name and its
+  alias, as they never hold values.
+
+  Decision 6; `protocols/class_read`, mirroring `protocols/class_lookup`.
+
+- **A derived alias over an inherited trait**
+
+  A derived class declares a trait whose alias is the name of an inherited trait. The lookup gives
+  the name to the derived trait, but python finds the inherited trait along the `__mro__` first,
+  so the read gives the ancestor's default.
+
+  Open, see below; `class_read_alias_shadows_name`, mirroring `class_lookup_alias_shadows_name`.
+
+- **A derived alias over an inherited plain attribute**
+
+  The same, but the name belongs to a plain attribute of the ancestor, so the read gives that
+  attribute. In the body of a single class this collision is refused; across a derivation nothing
+  checks for it.
+
+  Open, see below; `class_read_alias_shadows_attribute`, mirroring
+  `class_lookup_alias_shadows_attribute`.
 
 ### Still open
+
+- What a derived alias does to a name its ancestors already hold, whether a trait or a plain
+  attribute. The lookup gives the name to the derived trait, and so does a write; a read finds the
+  ancestor's attribute along the `__mro__` before `Requirement.__getattr__` is consulted, so it
+  gives the ancestor's trait or attribute. The two disagree, and the read contradicts decisions 6
+  and 7.
 
 - How instances hold their values, and whether they follow the pattern of classes. The decisions
   above were made for classes alone, and some of them may not suit instances; they stay open to
