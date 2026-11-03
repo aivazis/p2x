@@ -24,8 +24,7 @@ def test() -> None:
     """
     Give a trait aliases with two mistakes among them
     """
-    # a good alias and two that are not strings, of any type, so the type checker lets the
-    # mistakes through
+    # a good alias and two that are not strings, which the type checker would otherwise refuse
     aliases: typing.Any = ("cut-width", 3.5, None)
     # attempt to
     try:

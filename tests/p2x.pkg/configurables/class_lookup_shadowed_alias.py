@@ -50,7 +50,7 @@ def test() -> None:
         # also known by two other names
         kerf.aliases |= {"cut-width", "width"}
 
-    # a saw with a plain attribute by the name of one of the aliases
+    # a saw with a plain attribute named after one of the aliases
     class TrackSaw(PanelSaw):
         """
         A panel saw that runs along a rail

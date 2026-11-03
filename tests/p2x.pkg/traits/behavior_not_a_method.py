@@ -29,7 +29,7 @@ def test() -> None:
     """
     Declare a behavior whose implementation is a number
     """
-    # the number, of any type, so the type checker lets the mistake through
+    # the number, which the type checker would otherwise refuse
     mistake: typing.Any = 60
     # attempt to
     try:
@@ -57,7 +57,7 @@ def test() -> None:
         # the declaration is located in a script
         locator = error.locator
         assert isinstance(locator, p2x.tracking.script)
-        # this file
+        # in this file
         assert locator.source == __file__
         # in the body of the class
         assert locator.function == "PanelSaw"

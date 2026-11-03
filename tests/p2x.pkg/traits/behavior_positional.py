@@ -29,7 +29,7 @@ def test() -> None:
     """
     Make the common mistake of passing a behavior its description positionally
     """
-    # the factory of behaviors, of any type, so the type checker lets the mistaken call through
+    # the factory of behaviors, through which the mistaken call gets past the type checker
     behavior: typing.Any = p2x.traits.behavior
     # attempt to
     try:
@@ -61,7 +61,7 @@ def test() -> None:
         # the declaration is located in a script
         locator = error.locator
         assert isinstance(locator, p2x.tracking.script)
-        # this file
+        # in this file
         assert locator.source == __file__
         # in the body of the class
         assert locator.function == "PanelSaw"

@@ -24,7 +24,7 @@ def test() -> None:
     """
     Give a trait a number as its aliases
     """
-    # the mistaken aliases, of any type, so the type checker lets the mistake through
+    # a number for the aliases, which the type checker would otherwise refuse
     mistake: typing.Any = 3.5
     # attempt to
     try:

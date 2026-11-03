@@ -27,7 +27,7 @@ def test() -> None:
     """
     # the mistaken alias
     mistake = ["width"]
-    # among the aliases, of any type, so the type checker lets the mistake through
+    # among the aliases, which the type checker would otherwise refuse
     aliases: typing.Any = ("cut-width", mistake)
     # attempt to
     try:
